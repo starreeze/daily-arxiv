@@ -1,0 +1,7 @@
+Please judge whether the following papers satisfy the statement: 
+{filter_statement}
+
+Here are the papers to evaluate:
+{papers}
+
+Please first provide a brief analysis on whether it satisfies the statement for each paper. Then provide your final answers in a JSON list where each element corresponds to the paper at the same index, like [true, false, true, ...]

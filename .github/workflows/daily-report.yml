@@ -1,0 +1,44 @@
+name: Daily ArXiv Report
+
+on:
+  schedule:
+    # Run at 1am UTC every day
+    - cron: "0 1 * * *"
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  generate-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Generate daily report
+        env:
+          QWEN_WEBAPI_TOKEN: ${{ secrets.QWEN_WEBAPI_TOKEN }}
+        run: |
+          python main.py
+
+      - name: Commit and push report
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add reports/
+          # Only commit if there are changes
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Add daily ArXiv report for $(date +%Y-%m-%d)"
+            git push
+          fi

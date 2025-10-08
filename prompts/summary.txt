@@ -1,0 +1,7 @@
+Please summarize the following papers from two perspectives according to title and abstract: motivation (which problem it tackles) and method (a high-level overview of how to tackle the problem). Each field should be short (usually 20-30 words).
+
+Here are the papers to summarize:
+{papers}
+
+For each paper, please provide a summary with motivation and method. Your response should be a JSON list where each element corresponds to the paper at the same index.
+Your response should be a JSON list like: [{{"motivation": "xxx", "method": "xxx"}}, {{"motivation": "xxx", "method": "xxx"}}, ...]

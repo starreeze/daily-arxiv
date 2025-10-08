@@ -1,0 +1,4 @@
+requests
+beautifulsoup4
+qwen-webapi>=0.1.2
+iterwrap

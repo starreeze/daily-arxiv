@@ -1,0 +1,13 @@
+{
+    "batch_size": 10,
+    "search_keyword": "multimodal",
+    "categories": [
+        "cs.AI",
+        "cs.CV",
+        "cs.CL",
+        "cs.LG",
+        "cs.MM"
+    ],
+    "filter_statement": "The paper should focus on general capability of MLLM instead of tackling specific subareas or tasks such as medicine, RAG, rebotics, etc. Frontier research directions on general MLLM such as multimodal reasoning, unified arch, etc. is also allowed.",
+    "qwen_webapi_token": ""
+}
