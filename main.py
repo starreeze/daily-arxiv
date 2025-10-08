@@ -150,10 +150,11 @@ def main():
             selected_papers.append((paper, summary | {"abstract": paper.summary}))
 
     this_month = datetime.now().strftime("%Y-%m")
+    today = datetime.now().strftime("%Y-%m-%d")
     os.makedirs(config["report_dir"], exist_ok=True)
     report_path = os.path.join(config["report_dir"], f"{this_month}.md")
     with open(report_path, "a") as f:
-        f.write(f"# {this_month}\n\n")
+        f.write(f"# {today}\n\n")
         for paper, summary in selected_papers:
             f.write(f"## {paper.title}\n\n")
             f.write(f"**Authors:** {', '.join(paper.authors)}\n")

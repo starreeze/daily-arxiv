@@ -41,9 +41,9 @@ pip install -r requirements.txt
 }
 ```
 
-4. Activate github actions to run the tool daily. You need to add secrets `PAT_TOKEN` and `QWEN_WEBAPI_TOKEN` to the repository.
-
 ## Usage
+
+### Local Run
 
 Run the tool to search and summarize today's papers:
 
@@ -56,6 +56,9 @@ The script will:
 2. Filter papers using your custom filter statement
 3. Summarize the filtered papers
 4. Generate a report in `reports/YYYY-MM.md`
+
+### Github Actions
+Activate github actions to run the tool daily. You need to add secrets `PAT_TOKEN` (github personal access token which has content write permission) and `QWEN_WEBAPI_TOKEN` to the repository.
 
 ## License
 
