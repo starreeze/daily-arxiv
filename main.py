@@ -157,7 +157,7 @@ def main():
         f.write(f"# {today}\n\n")
         for paper, summary in selected_papers:
             f.write(f"## {paper.title}\n\n")
-            f.write(f"**Authors:** {', '.join(paper.authors)}\n")
+            f.write(f"**Authors:** {', '.join(paper.authors)}\n\n")
             f.write(f"**Link:** {paper.pdf_url}\n\n")
             for k, v in summary.items():
                 f.write(f"### {k}\n{v}\n\n")
