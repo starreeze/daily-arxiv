@@ -37,11 +37,11 @@ pip install -r requirements.txt
         "cs.MM"
     ],
     "filter_statement": "Your custom filter criteria...",
-    "qwen_webapi_token": "your-token-here"
+    "qwen_webapi_token": ""
 }
 ```
 
-4. Activate github actions to run the tool daily.
+4. Activate github actions to run the tool daily. You need to add secrets `PAT_TOKEN` and `QWEN_WEBAPI_TOKEN` to the repository.
 
 ## Usage
 
