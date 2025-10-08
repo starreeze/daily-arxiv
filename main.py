@@ -149,11 +149,11 @@ def main():
         for paper, summary in zip(batch, cast(list[dict[str, str]], summaries)):
             selected_papers.append((paper, summary | {"abstract": paper.summary}))
 
-    today_str = datetime.now().strftime("%Y-%m")
-    report_path = os.path.join("reports", f"{today_str}.md")
-
-    with open(report_path, "a" if os.path.exists(report_path) else "w") as f:
-        f.write(f"# {today_str}\n\n")
+    this_month = datetime.now().strftime("%Y-%m")
+    os.makedirs(config["report_dir"], exist_ok=True)
+    report_path = os.path.join(config["report_dir"], f"{this_month}.md")
+    with open(report_path, "a") as f:
+        f.write(f"# {this_month}\n\n")
         for paper, summary in selected_papers:
             f.write(f"## {paper.title}\n\n")
             f.write(f"**Authors:** {', '.join(paper.authors)}\n")
