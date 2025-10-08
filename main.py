@@ -152,7 +152,7 @@ def main():
     today_str = datetime.now().strftime("%Y-%m")
     report_path = os.path.join("reports", f"{today_str}.md")
 
-    with open(report_path, "a") as f:
+    with open(report_path, "a" if os.path.exists(report_path) else "w") as f:
         f.write(f"# {today_str}\n\n")
         for paper, summary in selected_papers:
             f.write(f"## {paper.title}\n\n")
