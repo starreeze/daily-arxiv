@@ -1,7 +1,7 @@
 import json
 import math
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import TypeVar, cast
 
 from iterwrap import retry_dec
@@ -105,11 +105,38 @@ def summarize_papers_batch(papers: list[Paper], api: QwenApi) -> list[dict[str, 
     return data
 
 
+def find_last_day(report_path: str) -> str:
+    lines = open(report_path, "r").read().splitlines()
+    lines.reverse()
+    for line in lines:
+        if line.startswith("# "):
+            return line[2:].strip()
+    raise ValueError("No day found in report")
+
+
 def main():
     config = load_config()
+    this_month = datetime.now().strftime("%Y-%m")
+    today = datetime.now().strftime("%Y-%m-%d")
+    os.makedirs(config["report_dir"], exist_ok=True)
+    report_path = os.path.join(config["report_dir"], f"{this_month}.md")
 
-    print("Searching for today's papers...")
-    papers = search_arxiv(config["search_keyword"], config["categories"])
+    last_day = ""
+    if os.path.exists(report_path):
+        last_day = find_last_day(report_path)
+        if today == last_day:
+            print(f"Report for {today=} already exists. Skipping...")
+            return
+    else:  # search the last month's report
+        last_month = (datetime.now() - timedelta(days=28)).strftime("%Y-%m")
+        last_report_path = os.path.join(config["report_dir"], f"{last_month}.md")
+        if os.path.exists(last_report_path):
+            last_day = find_last_day(last_report_path)
+        else:  # maybe the first report; just use yesterday
+            last_day = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
+
+    print(f"Searching for papers from {last_day} to {today}...")
+    papers = search_arxiv(config["search_keyword"], config["categories"], today, last_day)
 
     if not papers:
         print("No new papers found today.")
@@ -149,10 +176,6 @@ def main():
         for paper, summary in zip(batch, cast(list[dict[str, str]], summaries)):
             selected_papers.append((paper, summary | {"abstract": paper.summary}))
 
-    this_month = datetime.now().strftime("%Y-%m")
-    today = datetime.now().strftime("%Y-%m-%d")
-    os.makedirs(config["report_dir"], exist_ok=True)
-    report_path = os.path.join(config["report_dir"], f"{this_month}.md")
     with open(report_path, "a") as f:
         f.write(f"# {today}\n\n")
         for paper, summary in selected_papers:

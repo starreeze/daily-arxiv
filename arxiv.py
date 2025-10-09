@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from datetime import datetime, timedelta
 from urllib.parse import urlencode
 
 import requests
@@ -18,11 +17,8 @@ class Paper:
     pdf_url: str
 
 
-def search_arxiv(keyword: str, categories: list[str]) -> list[Paper]:
+def search_arxiv(keyword: str, categories: list[str], today: str, last_day: str) -> list[Paper]:
     """Search arXiv using direct web requests and parse HTML results."""
-    today = datetime.now().date()
-    yesterday = today - timedelta(days=1)
-
     # Build the arXiv advanced search URL
     params = {
         "advanced": "",
@@ -33,8 +29,8 @@ def search_arxiv(keyword: str, categories: list[str]) -> list[Paper]:
         "classification-include_cross_list": "include",
         "date-year": "",
         "date-filter_by": "date_range",
-        "date-from_date": yesterday.strftime("%Y-%m-%d"),
-        "date-to_date": today.strftime("%Y-%m-%d"),
+        "date-from_date": last_day,
+        "date-to_date": today,
         "date-date_type": "submitted_date_first",
         "abstracts": "show",
         "size": "100",
