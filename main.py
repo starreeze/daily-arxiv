@@ -109,7 +109,7 @@ def find_last_day(report_path: str) -> str:
     lines = open(report_path, "r").read().splitlines()
     lines.reverse()
     for line in lines:
-        if line.startswith("# "):
+        if line.startswith("## "):
             return line[2:].strip()
     raise ValueError("No day found in report")
 
@@ -177,13 +177,13 @@ def main():
             selected_papers.append((paper, summary | {"abstract": paper.summary}))
 
     with open(report_path, "a") as f:
-        f.write(f"# {today}\n\n")
+        f.write(f"## {today}\n\n*Date Range: [{last_day}, {today})*\n\n")
         for paper, summary in selected_papers:
-            f.write(f"## {paper.title}\n\n")
+            f.write(f"### {paper.title}\n\n")
             f.write(f"**Authors:** {', '.join(paper.authors)}\n\n")
             f.write(f"**Link:** {paper.pdf_url}\n\n")
             for k, v in summary.items():
-                f.write(f"### {k}\n{v}\n\n")
+                f.write(f"**{k.capitalize()}:**\n\n{v}\n\n")
 
     print(f"Successfully generated report at {report_path}")
 
