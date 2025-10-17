@@ -2,7 +2,7 @@ import json
 import math
 import os
 from datetime import datetime, timedelta
-from typing import TypeVar, cast
+from typing import TypeVar
 
 from iterwrap import retry_dec
 from qwen_webapi import QwenApi
@@ -69,7 +69,7 @@ def format_papers(papers: list[Paper]) -> str:
     )
 
 
-@retry_dec(max_retry=3)
+@retry_dec(retry=3)
 def filter_papers_batch(papers: list[Paper], filter_statement: str, api: QwenApi) -> list[bool]:
     prompt_template = open("prompts/filter.txt", "r").read()
 
@@ -86,7 +86,7 @@ def filter_papers_batch(papers: list[Paper], filter_statement: str, api: QwenApi
     return json_data
 
 
-@retry_dec(max_retry=3)
+@retry_dec(retry=3)
 def summarize_papers_batch(papers: list[Paper], api: QwenApi) -> list[dict[str, str]]:
     prompt_template = open("prompts/summary.txt", "r").read()
 
@@ -156,7 +156,7 @@ def main():
     for batch in tqdm(paper_batches):
         filter_results = filter_papers_batch(batch, config["filter_statement"], api)
 
-        for paper, passed in zip(batch, cast(list[bool], filter_results)):
+        for paper, passed in zip(batch, filter_results):
             if passed:
                 filtered_papers.append(paper)
 
@@ -173,7 +173,7 @@ def main():
     for batch in tqdm(filtered_batches):
         summaries = summarize_papers_batch(batch, api)
 
-        for paper, summary in zip(batch, cast(list[dict[str, str]], summaries)):
+        for paper, summary in zip(batch, summaries):
             selected_papers.append((paper, summary | {"abstract": paper.summary}))
 
     with open(report_path, "a") as f:

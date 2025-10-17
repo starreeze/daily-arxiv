@@ -1,5 +1,5 @@
 requests
 beautifulsoup4
-qwen-webapi>=0.1.2
-iterwrap
 pyyaml
+qwen-webapi==0.1.2
+iterwrap==0.4.6.post1
